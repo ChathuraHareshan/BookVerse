@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Borrowed Books · BookVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#211F1B',
+          parchment: '#F6F1E4',
+          paper: '#FBF8F1',
+          card: '#EFE6D2',
+          line: '#DDD0AF',
+          forest: '#22463D',
+          forestdark: '#152E28',
+          forestlight: '#3A6C5D',
+          brass: '#B8863E',
+          brassdark: '#8F6526',
+          brasslight: '#E7C077',
+          cloth: '#8C3B32',
+          clothlight: '#C4685C',
+        },
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          body: ['Inter', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
+        },
+        boxShadow: {
+          card: '0 1px 2px rgba(33,31,27,0.06), 0 4px 14px rgba(33,31,27,0.06)',
+          lift: '0 8px 24px rgba(33,31,27,0.12)',
+        },
+        borderRadius: { xl2: '1.1rem' },
+      }
+    }
+  }
+</script>
+  
+<style>
+  html { scroll-behavior: smooth; }
+  body { background-color: #F6F1E4; background-image: radial-gradient(circle at 1px 1px, rgba(33,31,27,0.05) 1px, transparent 0); background-size: 22px 22px; }
+  ::selection { background: #E7C077; color: #211F1B; }
+  :focus-visible { outline: 2.5px solid #B8863E; outline-offset: 2px; border-radius: 2px; }
+  .stamp { font-family: 'IBM Plex Mono', monospace; letter-spacing: .06em; border: 1.5px dashed currentColor; transform: rotate(-2.5deg); }
+  .tab-notch { position: relative; }
+  .tab-notch.active::before { content:""; position:absolute; left:-1px; top:0; bottom:0; width:4px; background:#B8863E; border-radius:0 4px 4px 0; }
+  .spine { border-top-width: 6px; border-top-style: solid; }
+  .catalog-card { transition: transform .18s ease, box-shadow .18s ease; }
+  .catalog-card:hover { transform: translateY(-3px); }
+  .scrollbar-thin::-webkit-scrollbar{ height:6px; width:6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb{ background:#DDD0AF; border-radius:4px; }
+  input[type=checkbox].card-check { accent-color: #22463D; }
+  .fade-edge { -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%); }
+</style>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="font-body text-ink">
+  
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-paper border-r border-line -translate-x-full lg:translate-x-0 transition-transform duration-200 flex flex-col">
+    <div class="h-16 flex items-center px-5 border-b border-line"><a href="index.jsp" class="flex items-center gap-2.5 group">
+      <span class="grid place-items-center w-9 h-9 rounded-lg bg-forest text-brasslight shadow-card group-hover:bg-forestdark transition-colors">
+        <i data-lucide="book-marked" class="w-5 h-5"></i>
+      </span>
+      <span class="font-display text-forest text-xl font-semibold tracking-tight">Book<span class="text-brass">Verse</span></span>
+    </a></div>
+    <nav class="flex-1 overflow-y-auto py-5 px-2.5 space-y-1">
+      <p class="px-4 text-[11px] font-mono uppercase tracking-wider text-ink/40 mb-2">Member Area</p>
+      
+        <a href="member-dashboard.jsp" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="layout-dashboard" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Dashboard</span>
+        </a>
+        <a href="catalogue.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="library" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Browse Catalogue</span>
+        </a>
+        <a href="reservations.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="bookmark" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">My Reservations</span>
+        </a>
+        <a href="borrowed.html" class="tab-notch active flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm bg-card text-forest font-semibold transition-colors">
+          <i data-lucide="book-open-check" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">My Borrowed Books</span>
+        </a>
+        <a href="announcements.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="megaphone" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Announcements</span>
+        </a>
+        <a href="profile.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="user-round" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">My Profile</span>
+        </a>
+    </nav>
+    <div class="p-3 border-t border-line">
+      <div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-card/60">
+        <img src="https://i.pravatar.cc/64?img=47" class="w-9 h-9 rounded-full object-cover ring-2 ring-brass/40" alt="">
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-ink truncate">Amaya Perera</p>
+          <p class="text-xs text-ink/50 truncate">Member · BV-20481</p>
+        </div>
+      </div>
+      <a href="index.jsp" class="mt-1 flex items-center gap-3 px-4 py-2.5 rounded-lg text-cloth/80 hover:bg-cloth/10 hover:text-cloth transition-colors text-sm">
+        <i data-lucide="log-out" class="w-[18px] h-[18px]"></i> Log Out
+      </a>
+    </div>
+  </aside>
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-ink/40 z-30 hidden lg:hidden"></div>
+  <div class="lg:pl-64 min-h-screen flex flex-col">
+    
+  <header class="sticky top-0 z-20 h-16 bg-paper/90 backdrop-blur border-b border-line flex items-center gap-4 px-4 lg:px-8">
+    <button id="menu-btn" class="lg:hidden p-2 -ml-2 rounded-lg hover:bg-card/60"><i data-lucide="menu" class="w-5 h-5"></i></button>
+    <div class="min-w-0">
+      <h1 class="font-display text-lg font-semibold text-ink leading-tight truncate">My Borrowed Books</h1>
+      
+    </div>
+    <div class="flex-1"></div>
+    
+    <button class="relative p-2 rounded-lg hover:bg-card/60"><i data-lucide="bell" class="w-5 h-5 text-ink/60"></i><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-cloth rounded-full"></span></button>
+    
+  </header>
+    <main class="flex-1 px-4 lg:px-8 py-7 max-w-[1400px] w-full mx-auto">
+
+      <div class="mb-6">
+        <h2 class="font-display text-xl font-semibold text-ink">My Borrowed Books</h2>
+        <p class="text-sm text-ink/50 mt-0.5">Track due dates and renew titles before they're due back.</p>
+      </div>
+
+      <div class="bg-cloth/8 border border-cloth/30 rounded-xl2 p-4 flex items-start gap-3 mb-7">
+        <i data-lucide="alert-triangle" class="w-5 h-5 text-cloth shrink-0 mt-0.5"></i>
+        <div>
+          <p class="text-sm font-semibold text-cloth">1 book is overdue</p>
+          <p class="text-xs text-ink/60 mt-0.5">"The Quiet Cartographer" was due on 28 Jul 2026. Renew it or return it at any branch to avoid late fees.</p>
+        </div>
+      </div>
+
+      <div class="bg-paper rounded-xl2 border border-line shadow-card mb-8">
+        <div class="px-5 sm:px-6 py-4 border-b border-line flex items-center justify-between">
+          <h3 class="font-display font-semibold text-ink">Currently Borrowed</h3>
+          <span class="text-xs text-ink/40 font-mono">3 OF 5 LIMIT</span>
+        </div>
+        <div class="divide-y divide-line">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 px-5 sm:px-6 py-5 ">
+          <img src="https://picsum.photos/seed/bookverse21/80/106" class="w-12 h-16 rounded object-cover shadow-card shrink-0" alt="">
+          <div class="flex-1 min-w-0">
+            <p class="font-display font-semibold text-ink truncate">The Quiet Cartographer</p>
+            <p class="text-xs text-ink/50">Lena Whitfield</p>
+          </div>
+          <div class="text-xs text-ink/50 sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Borrowed</p>07 Jul 2026</div>
+          <div class="text-xs sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Due date</p><span class="text-cloth font-semibold">28 Jul 2026</span></div>
+          <div class="sm:w-32"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-white bg-cloth border-cloth text-white">OVERDUE</span></div>
+          <div class="sm:w-24 flex sm:justify-end"><button class="text-xs font-semibold bg-forest text-parchment px-3 py-1.5 rounded-lg hover:bg-forestdark">Renew</button></div>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 px-5 sm:px-6 py-5 ">
+          <img src="https://picsum.photos/seed/bookverse6/80/106" class="w-12 h-16 rounded object-cover shadow-card shrink-0" alt="">
+          <div class="flex-1 min-w-0">
+            <p class="font-display font-semibold text-ink truncate">Structures of Silence</p>
+            <p class="text-xs text-ink/50">Dr. R. Fonseka</p>
+          </div>
+          <div class="text-xs text-ink/50 sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Borrowed</p>21 Jul 2026</div>
+          <div class="text-xs sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Due date</p><span class="text-ink/70">04 Aug 2026</span></div>
+          <div class="sm:w-32"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-cloth bg-cloth/5 ">BORROWED</span></div>
+          <div class="sm:w-24 flex sm:justify-end"><button class="text-xs font-semibold bg-forest text-parchment px-3 py-1.5 rounded-lg hover:bg-forestdark">Renew</button></div>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 px-5 sm:px-6 py-5 ">
+          <img src="https://picsum.photos/seed/bookverse7/80/106" class="w-12 h-16 rounded object-cover shadow-card shrink-0" alt="">
+          <div class="flex-1 min-w-0">
+            <p class="font-display font-semibold text-ink truncate">Almanac of Tidewater Towns</p>
+            <p class="text-xs text-ink/50">M. Herath</p>
+          </div>
+          <div class="text-xs text-ink/50 sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Borrowed</p>24 Jul 2026</div>
+          <div class="text-xs sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Due date</p><span class="text-ink/70">09 Aug 2026</span></div>
+          <div class="sm:w-32"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-cloth bg-cloth/5 ">BORROWED</span></div>
+          <div class="sm:w-24 flex sm:justify-end"><button class="text-xs font-semibold bg-forest text-parchment px-3 py-1.5 rounded-lg hover:bg-forestdark">Renew</button></div>
+        </div></div>
+      </div>
+
+      <div class="bg-paper rounded-xl2 border border-line shadow-card">
+        <div class="px-5 sm:px-6 py-4 border-b border-line flex items-center justify-between">
+          <h3 class="font-display font-semibold text-ink">Borrowing History</h3>
+          <div class="flex items-center gap-2">
+            <select class="text-xs border border-line rounded-lg px-2.5 py-1.5 bg-parchment text-ink/60">
+              <option>Last 12 months</option>
+              <option>This year</option>
+              <option>All time</option>
+            </select>
+          </div>
+        </div>
+        <div class="divide-y divide-line">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 px-5 sm:px-6 py-5 ">
+          <img src="https://picsum.photos/seed/bookverse1/80/106" class="w-12 h-16 rounded object-cover shadow-card shrink-0" alt="">
+          <div class="flex-1 min-w-0">
+            <p class="font-display font-semibold text-ink truncate">The Salt Orchard</p>
+            <p class="text-xs text-ink/50">Nadia Bloom</p>
+          </div>
+          <div class="text-xs text-ink/50 sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Borrowed</p>02 May 2026</div>
+          <div class="text-xs sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Due date</p><span class="text-ink/40">16 May 2026</span></div>
+          <div class="sm:w-32"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-ink/50 bg-ink/5 ">RETURNED</span></div>
+          <div class="sm:w-24 flex sm:justify-end"><span class="text-xs text-ink/30">—</span></div>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 px-5 sm:px-6 py-5 ">
+          <img src="https://picsum.photos/seed/bookverse14/80/106" class="w-12 h-16 rounded object-cover shadow-card shrink-0" alt="">
+          <div class="flex-1 min-w-0">
+            <p class="font-display font-semibold text-ink truncate">Kitchen Almanac</p>
+            <p class="text-xs text-ink/50">R. Peiris</p>
+          </div>
+          <div class="text-xs text-ink/50 sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Borrowed</p>19 Apr 2026</div>
+          <div class="text-xs sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Due date</p><span class="text-ink/40">03 May 2026</span></div>
+          <div class="sm:w-32"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-ink/50 bg-ink/5 ">RETURNED</span></div>
+          <div class="sm:w-24 flex sm:justify-end"><span class="text-xs text-ink/30">—</span></div>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 px-5 sm:px-6 py-5 ">
+          <img src="https://picsum.photos/seed/bookverse13/80/106" class="w-12 h-16 rounded object-cover shadow-card shrink-0" alt="">
+          <div class="flex-1 min-w-0">
+            <p class="font-display font-semibold text-ink truncate">Principles of Old Machines</p>
+            <p class="text-xs text-ink/50">Eng. D. Silva</p>
+          </div>
+          <div class="text-xs text-ink/50 sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Borrowed</p>01 Mar 2026</div>
+          <div class="text-xs sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Due date</p><span class="text-ink/40">15 Mar 2026</span></div>
+          <div class="sm:w-32"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-ink/50 bg-ink/5 ">RETURNED</span></div>
+          <div class="sm:w-24 flex sm:justify-end"><span class="text-xs text-ink/30">—</span></div>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 px-5 sm:px-6 py-5 ">
+          <img src="https://picsum.photos/seed/bookverse16/80/106" class="w-12 h-16 rounded object-cover shadow-card shrink-0" alt="">
+          <div class="flex-1 min-w-0">
+            <p class="font-display font-semibold text-ink truncate">Notes for a Younger Reader</p>
+            <p class="text-xs text-ink/50">K. Amarasekera</p>
+          </div>
+          <div class="text-xs text-ink/50 sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Borrowed</p>09 Feb 2026</div>
+          <div class="text-xs sm:w-32"><p class="text-ink/40 font-mono uppercase text-[10px] mb-0.5">Due date</p><span class="text-ink/40">23 Feb 2026</span></div>
+          <div class="sm:w-32"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-ink/50 bg-ink/5 ">RETURNED</span></div>
+          <div class="sm:w-24 flex sm:justify-end"><span class="text-xs text-ink/30">—</span></div>
+        </div></div>
+      </div>
+
+
+    </main>
+    <footer class="px-4 lg:px-8 py-5 text-xs text-ink/40 border-t border-line">BookVerse Online Library Portal — UI Prototype for HF2K Web Component Development II</footer>
+  </div>
+  <script>lucide.createIcons();</script>
+  
+<script>
+  const menuBtn = document.getElementById('menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  function toggleNav(open){
+    sidebar.classList.toggle('-translate-x-full', !open);
+    backdrop.classList.toggle('hidden', !open);
+  }
+  menuBtn && menuBtn.addEventListener('click', () => toggleNav(true));
+  backdrop && backdrop.addEventListener('click', () => toggleNav(false));
+</script>
+</body>
+</html>

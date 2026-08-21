@@ -1,0 +1,236 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<%
+com.bookverse.service.AnnouncementService announcementService = new com.bookverse.service.AnnouncementService();
+request.setAttribute("announcements", announcementService.getAll());
+%>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Announcements · BookVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#211F1B',
+          parchment: '#F6F1E4',
+          paper: '#FBF8F1',
+          card: '#EFE6D2',
+          line: '#DDD0AF',
+          forest: '#22463D',
+          forestdark: '#152E28',
+          forestlight: '#3A6C5D',
+          brass: '#B8863E',
+          brassdark: '#8F6526',
+          brasslight: '#E7C077',
+          cloth: '#8C3B32',
+          clothlight: '#C4685C',
+        },
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          body: ['Inter', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
+        },
+        boxShadow: {
+          card: '0 1px 2px rgba(33,31,27,0.06), 0 4px 14px rgba(33,31,27,0.06)',
+          lift: '0 8px 24px rgba(33,31,27,0.12)',
+        },
+        borderRadius: { xl2: '1.1rem' },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background-color: #F6F1E4; background-image: radial-gradient(circle at 1px 1px, rgba(33,31,27,0.05) 1px, transparent 0); background-size: 22px 22px; }
+  ::selection { background: #E7C077; color: #211F1B; }
+  :focus-visible { outline: 2.5px solid #B8863E; outline-offset: 2px; border-radius: 2px; }
+  .stamp { font-family: 'IBM Plex Mono', monospace; letter-spacing: .06em; border: 1.5px dashed currentColor; transform: rotate(-2.5deg); }
+  .tab-notch { position: relative; }
+  .tab-notch.active::before { content:""; position:absolute; left:-1px; top:0; bottom:0; width:4px; background:#B8863E; border-radius:0 4px 4px 0; }
+  .spine { border-top-width: 6px; border-top-style: solid; }
+  .catalog-card { transition: transform .18s ease, box-shadow .18s ease; }
+  .catalog-card:hover { transform: translateY(-3px); }
+  .scrollbar-thin::-webkit-scrollbar{ height:6px; width:6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb{ background:#DDD0AF; border-radius:4px; }
+  input[type=checkbox].card-check { accent-color: #22463D; }
+  .fade-edge { -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%); }
+</style>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="font-body text-ink">
+
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-paper border-r border-line -translate-x-full lg:translate-x-0 transition-transform duration-200 flex flex-col">
+    <div class="h-16 flex items-center px-5 border-b border-line"><a href="index.jsp" class="flex items-center gap-2.5 group">
+      <span class="grid place-items-center w-9 h-9 rounded-lg bg-forest text-brasslight shadow-card group-hover:bg-forestdark transition-colors">
+        <i data-lucide="book-marked" class="w-5 h-5"></i>
+      </span>
+      <span class="font-display text-forest text-xl font-semibold tracking-tight">Book<span class="text-brass">Verse</span></span>
+    </a></div>
+    <nav class="flex-1 overflow-y-auto py-5 px-2.5 space-y-1">
+      <p class="px-4 text-[11px] font-mono uppercase tracking-wider text-ink/40 mb-2">Member Area</p>
+
+        <a href="member-dashboard.jsp" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="layout-dashboard" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Dashboard</span>
+        </a>
+        <a href="catalogue.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="library" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Browse Catalogue</span>
+        </a>
+        <a href="reservations.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="bookmark" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">My Reservations</span>
+        </a>
+        <a href="borrowed.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="book-open-check" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">My Borrowed Books</span>
+        </a>
+        <a href="announcements.html" class="tab-notch active flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm bg-card text-forest font-semibold transition-colors">
+          <i data-lucide="megaphone" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Announcements</span>
+        </a>
+        <a href="profile.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="user-round" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">My Profile</span>
+        </a>
+    </nav>
+    <div class="p-3 border-t border-line">
+      <div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-card/60">
+        <img src="https://i.pravatar.cc/64?img=47" class="w-9 h-9 rounded-full object-cover ring-2 ring-brass/40" alt="">
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-ink truncate">Amaya Perera</p>
+          <p class="text-xs text-ink/50 truncate">Member · BV-20481</p>
+        </div>
+      </div>
+      <a href="index.jsp" class="mt-1 flex items-center gap-3 px-4 py-2.5 rounded-lg text-cloth/80 hover:bg-cloth/10 hover:text-cloth transition-colors text-sm">
+        <i data-lucide="log-out" class="w-[18px] h-[18px]"></i> Log Out
+      </a>
+    </div>
+  </aside>
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-ink/40 z-30 hidden lg:hidden"></div>
+  <div class="lg:pl-64 min-h-screen flex flex-col">
+
+  <header class="sticky top-0 z-20 h-16 bg-paper/90 backdrop-blur border-b border-line flex items-center gap-4 px-4 lg:px-8">
+    <button id="menu-btn" class="lg:hidden p-2 -ml-2 rounded-lg hover:bg-card/60"><i data-lucide="menu" class="w-5 h-5"></i></button>
+    <div class="min-w-0">
+      <h1 class="font-display text-lg font-semibold text-ink leading-tight truncate">Announcements</h1>
+
+    </div>
+    <div class="flex-1"></div>
+
+    <button class="relative p-2 rounded-lg hover:bg-card/60"><i data-lucide="bell" class="w-5 h-5 text-ink/60"></i><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-cloth rounded-full"></span></button>
+
+  </header>
+    <main class="flex-1 px-4 lg:px-8 py-7 max-w-[1400px] w-full mx-auto">
+
+      <div class="mb-6">
+        <h2 class="font-display text-xl font-semibold text-ink">Library Announcements</h2>
+        <p class="text-sm text-ink/50 mt-0.5">Notices, closures, and news from your BookVerse branch.</p>
+      </div>
+
+      <div class="flex flex-wrap gap-2 mb-6">
+        <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-forest text-parchment">All Notices</button>
+        <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-line text-ink/60 bg-paper hover:border-forest">Hours &amp; Closures</button>
+        <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-line text-ink/60 bg-paper hover:border-forest">New Arrivals</button>
+        <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-line text-ink/60 bg-paper hover:border-forest">Events</button>
+        <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-line text-ink/60 bg-paper hover:border-forest">System</button>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-5">
+
+        <article class="bg-paper rounded-xl2 border border-line shadow-card p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-1 rounded bg-brass/10 text-brassdark">Hours & Closures</span>
+            <i data-lucide="pin" class="w-3.5 h-3.5 text-brass"></i>
+            <span class="text-xs text-ink/40 ml-auto">2 days ago</span>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-ink mb-2">Extended reading-room hours this week</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">The Negombo Central reading room will stay open until 9:00 PM from Monday to Friday to support exam-season study. Weekend hours are unchanged.</p>
+        </article>
+
+        <article class="bg-paper rounded-xl2 border border-line shadow-card p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-1 rounded bg-forest/10 text-forest">New Arrivals</span>
+
+            <span class="text-xs text-ink/40 ml-auto">5 days ago</span>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-ink mb-2">New arrivals: Sri Lankan short fiction shelf</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">24 new titles from contemporary Sri Lankan authors have joined the Fiction section, including two BookVerse book-club picks for August.</p>
+        </article>
+
+        <article class="bg-paper rounded-xl2 border border-line shadow-card p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-1 rounded bg-cloth/10 text-cloth">System</span>
+
+            <span class="text-xs text-ink/40 ml-auto">1 week ago</span>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-ink mb-2">Scheduled system maintenance, 2 Aug</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">Online reservations and renewals will be unavailable between 12:00 AM and 4:00 AM on 2 August while we perform scheduled maintenance.</p>
+        </article>
+
+        <article class="bg-paper rounded-xl2 border border-line shadow-card p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-1 rounded bg-brass/10 text-brassdark">Events</span>
+
+            <span class="text-xs text-ink/40 ml-auto">1 week ago</span>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-ink mb-2">Author talk: Lena Whitfield, 14 Aug</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">Join us for a reading and Q&A with Lena Whitfield, author of 'The Quiet Cartographer', at the Negombo Central reading hall.</p>
+        </article>
+
+        <article class="bg-paper rounded-xl2 border border-line shadow-card p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-1 rounded bg-brass/10 text-brassdark">Hours & Closures</span>
+
+            <span class="text-xs text-ink/40 ml-auto">2 weeks ago</span>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-ink mb-2">Closed for Poya Day, 29 July</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">All BookVerse branches will be closed on 29 July in observance of Poya Day. Digital renewals remain available online.</p>
+        </article>
+
+        <article class="bg-paper rounded-xl2 border border-line shadow-card p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-1 rounded bg-forest/10 text-forest">New Arrivals</span>
+
+            <span class="text-xs text-ink/40 ml-auto">3 weeks ago</span>
+          </div>
+          <h3 class="font-display text-lg font-semibold text-ink mb-2">Children's section reorganised by age group</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">The children's collection has been reorganised into clearer age-based sections to make browsing easier for young readers and parents.</p>
+        </article>
+      </div>
+
+      <div class="flex justify-center mt-8">
+        <button class="px-5 py-2.5 rounded-lg border border-line text-sm font-semibold text-ink/60 hover:border-forest hover:text-forest bg-paper">Load Earlier Notices</button>
+      </div>
+
+
+    </main>
+    <footer class="px-4 lg:px-8 py-5 text-xs text-ink/40 border-t border-line">BookVerse Online Library Portal — UI Prototype for HF2K Web Component Development II</footer>
+  </div>
+  <script>lucide.createIcons();</script>
+
+<script>
+  const menuBtn = document.getElementById('menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  function toggleNav(open){
+    sidebar.classList.toggle('-translate-x-full', !open);
+    backdrop.classList.toggle('hidden', !open);
+  }
+  menuBtn && menuBtn.addEventListener('click', () => toggleNav(true));
+  backdrop && backdrop.addEventListener('click', () => toggleNav(false));
+</script>
+</body>
+</html>

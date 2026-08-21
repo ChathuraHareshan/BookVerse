@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Books · BookVerse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#211F1B',
+          parchment: '#F6F1E4',
+          paper: '#FBF8F1',
+          card: '#EFE6D2',
+          line: '#DDD0AF',
+          forest: '#22463D',
+          forestdark: '#152E28',
+          forestlight: '#3A6C5D',
+          brass: '#B8863E',
+          brassdark: '#8F6526',
+          brasslight: '#E7C077',
+          cloth: '#8C3B32',
+          clothlight: '#C4685C',
+        },
+        fontFamily: {
+          display: ['Fraunces', 'serif'],
+          body: ['Inter', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'monospace'],
+        },
+        boxShadow: {
+          card: '0 1px 2px rgba(33,31,27,0.06), 0 4px 14px rgba(33,31,27,0.06)',
+          lift: '0 8px 24px rgba(33,31,27,0.12)',
+        },
+        borderRadius: { xl2: '1.1rem' },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background-color: #F6F1E4; background-image: radial-gradient(circle at 1px 1px, rgba(33,31,27,0.05) 1px, transparent 0); background-size: 22px 22px; }
+  ::selection { background: #E7C077; color: #211F1B; }
+  :focus-visible { outline: 2.5px solid #B8863E; outline-offset: 2px; border-radius: 2px; }
+  .stamp { font-family: 'IBM Plex Mono', monospace; letter-spacing: .06em; border: 1.5px dashed currentColor; transform: rotate(-2.5deg); }
+  .tab-notch { position: relative; }
+  .tab-notch.active::before { content:""; position:absolute; left:-1px; top:0; bottom:0; width:4px; background:#B8863E; border-radius:0 4px 4px 0; }
+  .spine { border-top-width: 6px; border-top-style: solid; }
+  .catalog-card { transition: transform .18s ease, box-shadow .18s ease; }
+  .catalog-card:hover { transform: translateY(-3px); }
+  .scrollbar-thin::-webkit-scrollbar{ height:6px; width:6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb{ background:#DDD0AF; border-radius:4px; }
+  input[type=checkbox].card-check { accent-color: #22463D; }
+  .fade-edge { -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%); }
+</style>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="font-body text-ink">
+
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-paper border-r border-line -translate-x-full lg:translate-x-0 transition-transform duration-200 flex flex-col">
+    <div class="h-16 flex items-center px-5 border-b border-line"><a href="index.jsp" class="flex items-center gap-2.5 group">
+      <span class="grid place-items-center w-9 h-9 rounded-lg bg-forest text-brasslight shadow-card group-hover:bg-forestdark transition-colors">
+        <i data-lucide="book-marked" class="w-5 h-5"></i>
+      </span>
+      <span class="font-display text-forest text-xl font-semibold tracking-tight">Book<span class="text-brass">Verse</span></span>
+    </a></div>
+    <nav class="flex-1 overflow-y-auto py-5 px-2.5 space-y-1">
+      <p class="px-4 text-[11px] font-mono uppercase tracking-wider text-ink/40 mb-2">Staff Area</p>
+
+        <a href="admin-dashboard.jsp" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="layout-dashboard" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Dashboard</span>
+        </a>
+        <a href="manage-books.html" class="tab-notch active flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm bg-card text-forest font-semibold transition-colors">
+          <i data-lucide="book-copy" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Manage Books</span>
+        </a>
+        <a href="manage-members.jsp" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="users" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Manage Members</span>
+        </a>
+        <a href="admin-reservations.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="bookmark" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Reservations</span>
+        </a>
+        <a href="admin-announcements.html" class="tab-notch  flex items-center gap-3 px-4 py-2.5 rounded-r-lg rounded-l-sm text-ink/70 hover:bg-card/60 hover:text-ink transition-colors">
+          <i data-lucide="megaphone" class="w-[18px] h-[18px] shrink-0"></i>
+          <span class="text-sm">Announcements</span>
+        </a>
+    </nav>
+    <div class="p-3 border-t border-line">
+      <div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-card/60">
+        <img src="https://i.pravatar.cc/64?img=12" class="w-9 h-9 rounded-full object-cover ring-2 ring-brass/40" alt="">
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-ink truncate">S. Gunawardena</p>
+          <p class="text-xs text-ink/50 truncate">Librarian · Staff</p>
+        </div>
+      </div>
+      <a href="index.jsp" class="mt-1 flex items-center gap-3 px-4 py-2.5 rounded-lg text-cloth/80 hover:bg-cloth/10 hover:text-cloth transition-colors text-sm">
+        <i data-lucide="log-out" class="w-[18px] h-[18px]"></i> Log Out
+      </a>
+    </div>
+  </aside>
+  <div id="sidebar-backdrop" class="fixed inset-0 bg-ink/40 z-30 hidden lg:hidden"></div>
+  <div class="lg:pl-64 min-h-screen flex flex-col">
+
+  <header class="sticky top-0 z-20 h-16 bg-paper/90 backdrop-blur border-b border-line flex items-center gap-4 px-4 lg:px-8">
+    <button id="menu-btn" class="lg:hidden p-2 -ml-2 rounded-lg hover:bg-card/60"><i data-lucide="menu" class="w-5 h-5"></i></button>
+    <div class="min-w-0">
+      <h1 class="font-display text-lg font-semibold text-ink leading-tight truncate">Manage Books</h1>
+      <p class="text-xs text-ink/50 -mt-0.5">Add, edit, and retire catalogue titles</p>
+    </div>
+    <div class="flex-1"></div>
+
+        <div class="hidden md:flex items-center gap-2 bg-parchment border border-line rounded-full px-4 py-2 w-72">
+          <i data-lucide="search" class="w-4 h-4 text-ink/40"></i>
+          <input type="text" placeholder="Search members, books..." class="bg-transparent outline-none text-sm w-full placeholder:text-ink/40">
+        </div>
+    <button class="relative p-2 rounded-lg hover:bg-card/60"><i data-lucide="bell" class="w-5 h-5 text-ink/60"></i><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-cloth rounded-full"></span></button>
+    <button onclick="openBookModal()" class="flex items-center gap-1.5 bg-forest text-parchment text-sm font-semibold px-4 py-2 rounded-lg hover:bg-forestdark transition-colors"><i data-lucide="plus" class="w-4 h-4"></i><span class="hidden sm:inline">Add Book</span></button>
+  </header>
+    <main class="flex-1 px-4 lg:px-8 py-7 max-w-[1400px] w-full mx-auto">
+
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+        <div class="flex items-center gap-2">
+          <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-forest text-parchment">All (12,400)</button>
+          <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-line text-ink/60 bg-paper hover:border-forest">Available</button>
+          <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-line text-ink/60 bg-paper hover:border-forest">Borrowed</button>
+          <button class="px-3.5 py-1.5 rounded-full text-xs font-semibold border border-line text-ink/60 bg-paper hover:border-forest">Reserved</button>
+        </div>
+        <div class="relative w-full sm:w-64">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-ink/35"></i>
+          <input type="text" placeholder="Search title, author, ISBN..." class="w-full pl-10 pr-3 py-2 rounded-lg border border-line bg-paper text-sm focus:border-forest outline-none">
+        </div>
+      </div>
+
+      <div class="bg-paper rounded-xl2 border border-line shadow-card overflow-hidden">
+        <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse min-w-[760px]">
+          <thead>
+            <tr class="border-b border-line bg-card/40">
+              <th class="py-3 pl-5 sm:pl-6 w-10"><input type="checkbox" class="card-check rounded border-line"></th>
+              <th class="py-3 pr-4 text-xs font-semibold text-ink/50 uppercase tracking-wide">Title</th>
+              <th class="py-3 pr-4 text-xs font-semibold text-ink/50 uppercase tracking-wide">Genre</th>
+              <th class="py-3 pr-4 text-xs font-semibold text-ink/50 uppercase tracking-wide">ISBN</th>
+              <th class="py-3 pr-4 text-xs font-semibold text-ink/50 uppercase tracking-wide">Copies</th>
+              <th class="py-3 pr-4 text-xs font-semibold text-ink/50 uppercase tracking-wide">Status</th>
+              <th class="py-3 pr-5 sm:pr-6 text-xs font-semibold text-ink/50 uppercase tracking-wide text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+        <tr class="border-b border-line last:border-0 hover:bg-card/30">
+          <td class="py-3.5 pl-5 sm:pl-6"><input type="checkbox" class="card-check rounded border-line"></td>
+          <td class="py-3.5 pr-4">
+            <div class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/bookverse1/60/80" class="w-9 h-12 rounded object-cover shadow-card" alt="">
+              <div class="min-w-0"><p class="font-medium text-sm text-ink truncate">The Salt Orchard</p><p class="text-xs text-ink/45 truncate">Nadia Bloom</p></div>
+            </div>
+          </td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">Fiction</td>
+          <td class="py-3.5 pr-4 text-xs font-mono text-ink/50">978-955-0421-11-2</td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">5 copies</td>
+          <td class="py-3.5 pr-4"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-forest bg-forest/5 ">AVAILABLE</span></td>
+          <td class="py-3.5 pr-5 sm:pr-6">
+            <div class="flex items-center justify-end gap-1">
+              <button title="View" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-forest"><i data-lucide="eye" class="w-4 h-4"></i></button>
+              <button title="Edit" onclick="openBookModal()" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-brassdark"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+              <button title="Delete" onclick="openDeleteModal('The Salt Orchard')" class="p-1.5 rounded-lg hover:bg-cloth/10 text-ink/50 hover:text-cloth"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="border-b border-line last:border-0 hover:bg-card/30">
+          <td class="py-3.5 pl-5 sm:pl-6"><input type="checkbox" class="card-check rounded border-line"></td>
+          <td class="py-3.5 pr-4">
+            <div class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/bookverse3/60/80" class="w-9 h-12 rounded object-cover shadow-card" alt="">
+              <div class="min-w-0"><p class="font-medium text-sm text-ink truncate">The Longform Silence</p><p class="text-xs text-ink/45 truncate">K. Amarasekera</p></div>
+            </div>
+          </td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">Poetry</td>
+          <td class="py-3.5 pr-4 text-xs font-mono text-ink/50">978-955-0421-45-9</td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">2 copies</td>
+          <td class="py-3.5 pr-4"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-brassdark bg-brass/10 ">RESERVED</span></td>
+          <td class="py-3.5 pr-5 sm:pr-6">
+            <div class="flex items-center justify-end gap-1">
+              <button title="View" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-forest"><i data-lucide="eye" class="w-4 h-4"></i></button>
+              <button title="Edit" onclick="openBookModal()" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-brassdark"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+              <button title="Delete" onclick="openDeleteModal('The Longform Silence')" class="p-1.5 rounded-lg hover:bg-cloth/10 text-ink/50 hover:text-cloth"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="border-b border-line last:border-0 hover:bg-card/30">
+          <td class="py-3.5 pl-5 sm:pl-6"><input type="checkbox" class="card-check rounded border-line"></td>
+          <td class="py-3.5 pr-4">
+            <div class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/bookverse4/60/80" class="w-9 h-12 rounded object-cover shadow-card" alt="">
+              <div class="min-w-0"><p class="font-medium text-sm text-ink truncate">Monsoon Ledger</p><p class="text-xs text-ink/45 truncate">S. Rathnayake</p></div>
+            </div>
+          </td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">Fiction</td>
+          <td class="py-3.5 pr-4 text-xs font-mono text-ink/50">978-955-0421-77-0</td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">3 copies</td>
+          <td class="py-3.5 pr-4"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-cloth bg-cloth/5 ">BORROWED</span></td>
+          <td class="py-3.5 pr-5 sm:pr-6">
+            <div class="flex items-center justify-end gap-1">
+              <button title="View" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-forest"><i data-lucide="eye" class="w-4 h-4"></i></button>
+              <button title="Edit" onclick="openBookModal()" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-brassdark"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+              <button title="Delete" onclick="openDeleteModal('Monsoon Ledger')" class="p-1.5 rounded-lg hover:bg-cloth/10 text-ink/50 hover:text-cloth"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="border-b border-line last:border-0 hover:bg-card/30">
+          <td class="py-3.5 pl-5 sm:pl-6"><input type="checkbox" class="card-check rounded border-line"></td>
+          <td class="py-3.5 pr-4">
+            <div class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/bookverse6/60/80" class="w-9 h-12 rounded object-cover shadow-card" alt="">
+              <div class="min-w-0"><p class="font-medium text-sm text-ink truncate">Structures of Silence</p><p class="text-xs text-ink/45 truncate">Dr. R. Fonseka</p></div>
+            </div>
+          </td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">Non-fiction</td>
+          <td class="py-3.5 pr-4 text-xs font-mono text-ink/50">978-955-0421-88-1</td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">4 copies</td>
+          <td class="py-3.5 pr-4"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-forest bg-forest/5 ">AVAILABLE</span></td>
+          <td class="py-3.5 pr-5 sm:pr-6">
+            <div class="flex items-center justify-end gap-1">
+              <button title="View" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-forest"><i data-lucide="eye" class="w-4 h-4"></i></button>
+              <button title="Edit" onclick="openBookModal()" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-brassdark"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+              <button title="Delete" onclick="openDeleteModal('Structures of Silence')" class="p-1.5 rounded-lg hover:bg-cloth/10 text-ink/50 hover:text-cloth"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="border-b border-line last:border-0 hover:bg-card/30">
+          <td class="py-3.5 pl-5 sm:pl-6"><input type="checkbox" class="card-check rounded border-line"></td>
+          <td class="py-3.5 pr-4">
+            <div class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/bookverse7/60/80" class="w-9 h-12 rounded object-cover shadow-card" alt="">
+              <div class="min-w-0"><p class="font-medium text-sm text-ink truncate">Almanac of Tidewater Towns</p><p class="text-xs text-ink/45 truncate">M. Herath</p></div>
+            </div>
+          </td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">Travel</td>
+          <td class="py-3.5 pr-4 text-xs font-mono text-ink/50">978-955-0421-91-4</td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">1 copies</td>
+          <td class="py-3.5 pr-4"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-cloth bg-cloth/5 ">BORROWED</span></td>
+          <td class="py-3.5 pr-5 sm:pr-6">
+            <div class="flex items-center justify-end gap-1">
+              <button title="View" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-forest"><i data-lucide="eye" class="w-4 h-4"></i></button>
+              <button title="Edit" onclick="openBookModal()" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-brassdark"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+              <button title="Delete" onclick="openDeleteModal('Almanac of Tidewater Towns')" class="p-1.5 rounded-lg hover:bg-cloth/10 text-ink/50 hover:text-cloth"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="border-b border-line last:border-0 hover:bg-card/30">
+          <td class="py-3.5 pl-5 sm:pl-6"><input type="checkbox" class="card-check rounded border-line"></td>
+          <td class="py-3.5 pr-4">
+            <div class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/bookverse13/60/80" class="w-9 h-12 rounded object-cover shadow-card" alt="">
+              <div class="min-w-0"><p class="font-medium text-sm text-ink truncate">Principles of Old Machines</p><p class="text-xs text-ink/45 truncate">Eng. D. Silva</p></div>
+            </div>
+          </td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">Technology</td>
+          <td class="py-3.5 pr-4 text-xs font-mono text-ink/50">978-955-0421-93-8</td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">6 copies</td>
+          <td class="py-3.5 pr-4"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-forest bg-forest/5 ">AVAILABLE</span></td>
+          <td class="py-3.5 pr-5 sm:pr-6">
+            <div class="flex items-center justify-end gap-1">
+              <button title="View" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-forest"><i data-lucide="eye" class="w-4 h-4"></i></button>
+              <button title="Edit" onclick="openBookModal()" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-brassdark"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+              <button title="Delete" onclick="openDeleteModal('Principles of Old Machines')" class="p-1.5 rounded-lg hover:bg-cloth/10 text-ink/50 hover:text-cloth"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="border-b border-line last:border-0 hover:bg-card/30">
+          <td class="py-3.5 pl-5 sm:pl-6"><input type="checkbox" class="card-check rounded border-line"></td>
+          <td class="py-3.5 pr-4">
+            <div class="flex items-center gap-3">
+              <img src="https://picsum.photos/seed/bookverse14/60/80" class="w-9 h-12 rounded object-cover shadow-card" alt="">
+              <div class="min-w-0"><p class="font-medium text-sm text-ink truncate">Kitchen Almanac</p><p class="text-xs text-ink/45 truncate">R. Peiris</p></div>
+            </div>
+          </td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">Cooking</td>
+          <td class="py-3.5 pr-4 text-xs font-mono text-ink/50">978-955-0421-97-6</td>
+          <td class="py-3.5 pr-4 text-xs text-ink/60">2 copies</td>
+          <td class="py-3.5 pr-4"><span class="stamp inline-block px-2.5 py-1 text-[11px] font-semibold uppercase rounded text-forest bg-forest/5 ">AVAILABLE</span></td>
+          <td class="py-3.5 pr-5 sm:pr-6">
+            <div class="flex items-center justify-end gap-1">
+              <button title="View" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-forest"><i data-lucide="eye" class="w-4 h-4"></i></button>
+              <button title="Edit" onclick="openBookModal()" class="p-1.5 rounded-lg hover:bg-card text-ink/50 hover:text-brassdark"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+              <button title="Delete" onclick="openDeleteModal('Kitchen Almanac')" class="p-1.5 rounded-lg hover:bg-cloth/10 text-ink/50 hover:text-cloth"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            </div>
+          </td>
+        </tr></tbody>
+        </table>
+        </div>
+        <div class="flex items-center justify-between px-5 sm:px-6 py-4 border-t border-line">
+          <p class="text-xs text-ink/45">Showing 7 of 12,400 titles</p>
+          <div class="flex items-center gap-1.5">
+            <button class="w-8 h-8 rounded-lg border border-line text-ink/40 grid place-items-center"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+            <button class="w-8 h-8 rounded-lg bg-forest text-parchment text-xs font-semibold">1</button>
+            <button class="w-8 h-8 rounded-lg border border-line text-xs hover:border-forest">2</button>
+            <button class="w-8 h-8 rounded-lg border border-line text-ink/60 grid place-items-center hover:border-forest"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add / Edit Book Modal -->
+      <div id="book-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="closeBookModal()"></div>
+        <div class="absolute inset-0 overflow-y-auto flex items-start sm:items-center justify-center p-4 py-8">
+          <div class="relative bg-paper rounded-xl2 shadow-lift w-full max-w-2xl border border-line">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-line">
+              <h3 id="book-modal-title" class="font-display text-lg font-semibold text-ink">Add New Book</h3>
+              <button onclick="closeBookModal()" class="p-1.5 rounded-lg hover:bg-card text-ink/50"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+
+            <form class="p-6 grid sm:grid-cols-5 gap-5" >
+              <!-- image upload -->
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-ink/60 mb-1.5">Cover image</label>
+                <div class="aspect-[3/4] w-full rounded-xl2 border-2 border-dashed border-line bg-parchment flex flex-col items-center justify-center text-center p-4 hover:border-brass transition-colors cursor-pointer">
+                  <i data-lucide="image-plus" class="w-8 h-8 text-ink/30 mb-2"></i>
+                  <p class="text-xs font-semibold text-ink/60">Click to upload cover</p>
+                  <p class="text-[11px] text-ink/35 mt-1">JPG or PNG, up to 5MB</p>
+                  <input type="file" accept="image/*" class="hidden">
+                </div>
+              </div>
+              <!-- fields -->
+              <div class="sm:col-span-3 space-y-4">
+                <div>
+                  <label class="block text-xs font-semibold text-ink/60 mb-1.5">Title</label>
+                  <input type="text" placeholder="e.g. The Salt Orchard" class="w-full px-3.5 py-2.5 rounded-lg border border-line bg-parchment text-sm focus:border-forest outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-ink/60 mb-1.5">Author</label>
+                  <input type="text" placeholder="e.g. Nadia Bloom" class="w-full px-3.5 py-2.5 rounded-lg border border-line bg-parchment text-sm focus:border-forest outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs font-semibold text-ink/60 mb-1.5">Genre</label>
+                    <select class="w-full px-3.5 py-2.5 rounded-lg border border-line bg-parchment text-sm focus:border-forest outline-none">
+                      <option>Fiction</option><option>Non-fiction</option><option>Poetry</option><option>History</option><option>Travel</option><option>Technology</option><option>Cooking</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-ink/60 mb-1.5">Copies</label>
+                    <input type="number" value="1" min="1" class="w-full px-3.5 py-2.5 rounded-lg border border-line bg-parchment text-sm focus:border-forest outline-none">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-ink/60 mb-1.5">ISBN</label>
+                  <input type="text" placeholder="978-955-0421-11-2" class="w-full px-3.5 py-2.5 rounded-lg border border-line bg-parchment text-sm focus:border-forest outline-none font-mono">
+                </div>
+              </div>
+              <div class="sm:col-span-5">
+                <label class="block text-xs font-semibold text-ink/60 mb-1.5">Description</label>
+                <textarea rows="3" placeholder="Short synopsis shown on the book details page..." class="w-full px-3.5 py-2.5 rounded-lg border border-line bg-parchment text-sm focus:border-forest outline-none resize-none"></textarea>
+              </div>
+              <div class="sm:col-span-5 flex justify-end gap-3 pt-1 border-t border-line mt-1">
+                <button type="button" onclick="closeBookModal()" class="px-4 py-2.5 rounded-lg text-sm font-semibold text-ink/60 hover:bg-card/60">Cancel</button>
+                <button type="button" onclick="closeBookModal()" class="px-5 py-2.5 rounded-lg text-sm font-semibold bg-forest text-parchment hover:bg-forestdark">Save Book</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete confirm modal -->
+      <div id="delete-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-ink/50 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+          <div class="relative bg-paper rounded-xl2 shadow-lift w-full max-w-sm border border-line p-6 text-center">
+            <span class="w-12 h-12 rounded-full bg-cloth/10 text-cloth grid place-items-center mx-auto mb-4"><i data-lucide="trash-2" class="w-5 h-5"></i></span>
+            <h3 class="font-display text-lg font-semibold text-ink mb-1.5">Remove this book?</h3>
+            <p id="delete-modal-text" class="text-sm text-ink/55 mb-6">This will remove the title from the catalogue. This action can't be undone.</p>
+            <div class="flex gap-3">
+              <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold border border-line text-ink/60 hover:bg-card/60">Cancel</button>
+              <button onclick="closeDeleteModal()" class="flex-1 px-4 py-2.5 rounded-lg text-sm font-semibold bg-cloth text-white hover:bg-cloth/90">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        function openBookModal(){ document.getElementById('book-modal').classList.remove('hidden'); }
+        function closeBookModal(){ document.getElementById('book-modal').classList.add('hidden'); }
+        function openDeleteModal(title){
+          document.getElementById('delete-modal-text').textContent = 'Remove "' + title + '" from the catalogue? This action can\'t be undone.';
+          document.getElementById('delete-modal').classList.remove('hidden');
+        }
+        function closeDeleteModal(){ document.getElementById('delete-modal').classList.add('hidden'); }
+      </script>
+
+
+    </main>
+    <footer class="px-4 lg:px-8 py-5 text-xs text-ink/40 border-t border-line">BookVerse Online Library Portal — UI Prototype for HF2K Web Component Development II</footer>
+  </div>
+  <script>lucide.createIcons();</script>
+
+<script>
+  const menuBtn = document.getElementById('menu-btn');
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  function toggleNav(open){
+    sidebar.classList.toggle('-translate-x-full', !open);
+    backdrop.classList.toggle('hidden', !open);
+  }
+  menuBtn && menuBtn.addEventListener('click', () => toggleNav(true));
+  backdrop && backdrop.addEventListener('click', () => toggleNav(false));
+</script>
+</body>
+</html>
